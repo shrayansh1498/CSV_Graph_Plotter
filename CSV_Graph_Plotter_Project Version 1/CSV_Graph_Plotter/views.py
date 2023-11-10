@@ -31,6 +31,7 @@ def index(request):
             uploaded_csv = form.save()
             # Process the CSV file and generate a plot here
             # Example: Generate a simple line plot
+            title = uploaded_csv.title
             data = pd.read_csv(uploaded_csv.csv_file)
             plt.plot(data['X'], data['Y'])
             plt.xlabel('X-axis')
@@ -39,7 +40,7 @@ def index(request):
             plt.savefig(buffer, format='png')
             plt.close()
             chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
-            return render(request, 'plot.html', {'chart': chart})
+            return render(request, 'plot.html', {'title': title,'chart': chart})
     else:
         form = CSVUploadForm()
     return render(request, 'upload.html', {'form': form})
