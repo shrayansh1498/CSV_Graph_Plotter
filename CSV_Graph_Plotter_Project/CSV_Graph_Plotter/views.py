@@ -33,9 +33,18 @@ def index(request):
             # Example: Generate a simple line plot
             title = uploaded_csv.title
             data = pd.read_csv(uploaded_csv.csv_file)
-            plt.plot(data['X'], data['Y'])
-            plt.xlabel('X-axis')
-            plt.ylabel('Y-axis')
+            # plt.plot(data['X'], data['Y'])
+            # plt.xlabel('X-axis')
+            # plt.ylabel('Y-axis')
+
+            # Allow users to specify X and Y column names (update these as needed)
+            x_column = request.POST.get('x_column', 'X')
+            y_column = request.POST.get('y_column', 'Y')
+            
+            plt.plot(data[x_column], data[y_column])
+            plt.xlabel(x_column)
+            plt.ylabel(y_column)
+
             buffer = BytesIO()
             plt.savefig(buffer, format='png')
             plt.close()
