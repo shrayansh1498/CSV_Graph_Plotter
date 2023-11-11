@@ -23,6 +23,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
+from django.contrib import messages #for error display
 
 def index(request):
     error_message = None  # Initialize error_message as None
@@ -47,9 +48,10 @@ def index(request):
             # Check if x and y columns exist in the data
             if x_column not in data.columns or y_column not in data.columns:
                 error_message = "The specified X or Y column does not exist in the CSV file. Please enter correct column names."
-                # return render(request, 'upload.html', {'form': form, 'error_message': error_message})
+                return render(request, 'error_popup.html', {'error_message': error_message})
             else:
-            
+                # error_message = None
+
                 plt.plot(data[x_column], data[y_column])
                 plt.xlabel(x_column)
                 plt.ylabel(y_column)
@@ -61,7 +63,7 @@ def index(request):
                 return render(request, 'plot.html', {'title': title,'chart': chart})
     else:
         form = CSVUploadForm()
-    return render(request, 'upload.html', {'form': form, 'error_message': error_message})
+    return render(request, 'upload.html', {'form': form})
 
 
 def about(request):
