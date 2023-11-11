@@ -17,5 +17,8 @@
 
         <button type="submit">Upload and Plot</button>
     </form>
+    {% if error_message %}
+        <p class="error">{{ error_message }}</p>
+    {% endif %}
 </body>
 </html>

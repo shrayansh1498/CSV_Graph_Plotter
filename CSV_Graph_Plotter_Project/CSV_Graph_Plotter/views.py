@@ -25,6 +25,7 @@ from io import BytesIO
 import base64
 
 def index(request):
+    error_message = None  # Initialize error_message as None
     if request.method == 'POST':
         form = CSVUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -42,19 +43,25 @@ def index(request):
             # y_column = request.POST.get('y_column')
             x_column = uploaded_csv.x_column
             y_column = uploaded_csv.y_column
-            
-            plt.plot(data[x_column], data[y_column])
-            plt.xlabel(x_column)
-            plt.ylabel(y_column)
 
-            buffer = BytesIO()
-            plt.savefig(buffer, format='png')
-            plt.close()
-            chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
-            return render(request, 'plot.html', {'title': title,'chart': chart})
+            # Check if x and y columns exist in the data
+            if x_column not in data.columns or y_column not in data.columns:
+                error_message = "The specified X or Y column does not exist in the CSV file. Please enter correct column names."
+                # return render(request, 'upload.html', {'form': form, 'error_message': error_message})
+            else:
+            
+                plt.plot(data[x_column], data[y_column])
+                plt.xlabel(x_column)
+                plt.ylabel(y_column)
+
+                buffer = BytesIO()
+                plt.savefig(buffer, format='png')
+                plt.close()
+                chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
+                return render(request, 'plot.html', {'title': title,'chart': chart})
     else:
         form = CSVUploadForm()
-    return render(request, 'upload.html', {'form': form})
+    return render(request, 'upload.html', {'form': form, 'error_message': error_message})
 
 
 def about(request):
