@@ -9,11 +9,11 @@
         {% csrf_token %}
         {{ form.as_p }}
 
-        <label for="x_column">X Column Name:</label>
-        <input type="text" name="x_column" id="x_column" value="X">
+        {% comment %} <label for="x_column">X Column Name:</label>
+        <input type="text" name="x_column" id="x_column">
         
         <label for="y_column">Y Column Name:</label>
-        <input type="text" name="y_column" id="y_column" value="Y">
+        <input type="text" name="y_column" id="y_column"> {% endcomment %}
 
         <button type="submit">Upload and Plot</button>
     </form>

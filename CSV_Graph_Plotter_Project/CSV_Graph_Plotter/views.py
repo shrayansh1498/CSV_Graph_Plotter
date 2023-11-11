@@ -37,9 +37,11 @@ def index(request):
             # plt.xlabel('X-axis')
             # plt.ylabel('Y-axis')
 
-            # Allow users to specify X and Y column names (update these as needed)
-            x_column = request.POST.get('x_column', 'X')
-            y_column = request.POST.get('y_column', 'Y')
+            # Allow users to specify X and Y column names
+            # x_column = request.POST.get('x_column')
+            # y_column = request.POST.get('y_column')
+            x_column = uploaded_csv.x_column
+            y_column = uploaded_csv.y_column
             
             plt.plot(data[x_column], data[y_column])
             plt.xlabel(x_column)
