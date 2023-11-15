@@ -1,0 +1,29 @@
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Graph Plotter - Upload</title>
+</head>
+<body>
+    <h2>Upload file here</h2>
+    <p>This is taken using a variable</p>
+    <p><b>{{variable1}} </b></p>
+    <p><b>{{variable2}} </b></p>
+</body>
+</html> {% endcomment %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Graph Plotter - Upload</title>
+</head>
+<body>
+    <h1>Upload a CSV File</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload and Plot</button>
+    </form>
+</body>
+</html>
+
+
