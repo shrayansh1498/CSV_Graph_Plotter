@@ -18,6 +18,7 @@ from django.contrib import messages #for error display
 
 def index(request):
     error_message = None  # Initialize error_message as None
+    form = CSVUploadForm()
     if request.method == 'POST':
         form = CSVUploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -25,10 +26,15 @@ def index(request):
             # Process the CSV file and generate a plot here
             # Example: Generate a simple line plot
             title = uploaded_csv.title
-            data = pd.read_csv(uploaded_csv.csv_file)
-            # plt.plot(data['X'], data['Y'])
-            # plt.xlabel('X-axis')
-            # plt.ylabel('Y-axis')
+
+            try:
+                data = pd.read_csv(uploaded_csv.csv_file)
+
+            # if the CSV has no columns i.e. no data, then it will run
+            except pd.errors.EmptyDataError:
+                error_message = "The uploaded CSV file has no data. Please upload a valid CSV file."
+                return render(request, 'error.html', {'error_message': error_message})
+
 
             # Allow users to specify X and Y column names
             # x_column = request.POST.get('x_column')
@@ -37,13 +43,17 @@ def index(request):
             y_column = uploaded_csv.y_column
 
             # Check if x and y columns exist in the data
-            if x_column not in data.columns or y_column not in data.columns:
-                error_message = "The specified X or Y column does not exist in the CSV file. Please enter correct column names."
-                return render(request, 'error_popup.html', {'error_message': error_message})
+            if x_column not in data.columns:
+                error_message = "The specified X column does not exist in the CSV file. Please enter correct column name."
+                return render(request, 'error.html', {'error_message': error_message})
+            
+            elif y_column not in data.columns:
+                error_message = "The specified Y column does not exist in the CSV file. Please enter correct column name."
+                return render(request, 'error.html', {'error_message': error_message})
+            
             else:
-                # error_message = None
-
-                plt.plot(data[x_column], data[y_column])
+                plot_data = data.dropna(subset=[x_column, y_column])
+                plt.plot(plot_data[x_column], plot_data[y_column])
                 plt.xlabel(x_column)
                 plt.ylabel(y_column)
 
@@ -54,7 +64,7 @@ def index(request):
                 return render(request, 'plot.html', {'title': title,'chart': chart})
     else:
         form = CSVUploadForm()
-    return render(request, 'upload.html', {'form': form})
+    return render(request, 'upload.html', {'form': form, 'error_message' : error_message})
 
 
 def about(request):
