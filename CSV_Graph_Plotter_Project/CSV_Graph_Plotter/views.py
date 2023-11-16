@@ -45,12 +45,19 @@ def index(request):
             # Check if x and y columns exist in the data
             if x_column not in data.columns:
                 error_message = "The specified X column does not exist in the CSV file. Please enter correct column name."
+<<<<<<< HEAD
                 return render(request, 'error.html', {'error_message': error_message})
             
             elif y_column not in data.columns:
                 error_message = "The specified Y column does not exist in the CSV file. Please enter correct column name."
                 return render(request, 'error.html', {'error_message': error_message})
             
+=======
+                return render(request, 'error_popup.html', {'error_message': error_message})
+            elif y_column not in data.columns:
+                error_message = "The specified Y column does not exist in the CSV file. Please enter correct column name."
+                return render(request, 'error_popup.html', {'error_message': error_message})
+>>>>>>> 27bc532 (version 11)
             else:
                 plot_data = data.dropna(subset=[x_column, y_column])
                 plt.plot(plot_data[x_column], plot_data[y_column])
