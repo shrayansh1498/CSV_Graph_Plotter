@@ -46,6 +46,7 @@ def index(request):
             if x_column not in data.columns:
                 error_message = "The specified X column does not exist in the CSV file. Please enter correct column name."
 <<<<<<< HEAD
+<<<<<<< HEAD
                 return render(request, 'error.html', {'error_message': error_message})
             
             elif y_column not in data.columns:
@@ -53,6 +54,11 @@ def index(request):
                 return render(request, 'error.html', {'error_message': error_message})
             
 =======
+=======
+                return render(request, 'error_popup.html', {'error_message': error_message})
+            elif y_column not in data.columns:
+                error_message = "The specified Y column does not exist in the CSV file. Please enter correct column name."
+>>>>>>> 27bc532 (version 11)
                 return render(request, 'error_popup.html', {'error_message': error_message})
             elif y_column not in data.columns:
                 error_message = "The specified Y column does not exist in the CSV file. Please enter correct column name."
