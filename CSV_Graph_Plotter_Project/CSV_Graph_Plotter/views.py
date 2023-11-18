@@ -30,11 +30,16 @@ def index(request):
             try:
                 data = pd.read_csv(uploaded_csv.csv_file)
 
+                # if the CSV has only one column i.e. then it will run
+                if len(data.columns) == 1: 
+                    error_message = "The uploaded CSV file contains only one column. Please upload a CSV file with multiple columns."
+                    return render(request, 'error.html', {'error_message': error_message})
+
+
             # if the CSV has no columns i.e. no data, then it will run
             except pd.errors.EmptyDataError:
                 error_message = "The uploaded CSV file has no data. Please upload a valid CSV file."
                 return render(request, 'error.html', {'error_message': error_message})
-
 
             # Allow users to specify X and Y column names
             # x_column = request.POST.get('x_column')
@@ -45,28 +50,22 @@ def index(request):
             # Check if x and y columns exist in the data
             if x_column not in data.columns:
                 error_message = "The specified X column does not exist in the CSV file. Please enter correct column name."
-<<<<<<< HEAD
-<<<<<<< HEAD
                 return render(request, 'error.html', {'error_message': error_message})
             
             elif y_column not in data.columns:
                 error_message = "The specified Y column does not exist in the CSV file. Please enter correct column name."
                 return render(request, 'error.html', {'error_message': error_message})
             
-=======
-=======
-                return render(request, 'error_popup.html', {'error_message': error_message})
-            elif y_column not in data.columns:
-                error_message = "The specified Y column does not exist in the CSV file. Please enter correct column name."
->>>>>>> 27bc532 (version 11)
-                return render(request, 'error_popup.html', {'error_message': error_message})
-            elif y_column not in data.columns:
-                error_message = "The specified Y column does not exist in the CSV file. Please enter correct column name."
-                return render(request, 'error_popup.html', {'error_message': error_message})
->>>>>>> 27bc532 (version 11)
             else:
+                #dropna is used to skip row in case any of the column contains null value
                 plot_data = data.dropna(subset=[x_column, y_column])
-                plt.plot(plot_data[x_column], plot_data[y_column])
+
+                # Check if there are data points to plot
+                if plot_data.empty:
+                    error_message = "No data points to plot."
+                    return render(request, 'error.html', {'error_message': error_message})
+
+                plt.plot(plot_data[x_column], plot_data[y_column],  marker='o', linestyle='-', markersize=3)
                 plt.xlabel(x_column)
                 plt.ylabel(y_column)
 
