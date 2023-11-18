@@ -1,11 +1,31 @@
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Graph Plotter - Plot</title>
+</head>
+<body>
+    <h1>{{title }}</h1> 
+    <img src="data:image/png;base64,{{ chart }}" alt="Chart">
+</body>
+</html>  {% endcomment %}
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>CSV Graph Plotter - Plot</title>
 </head>
 <body>
-    <h1>Generated Plot</h1>
-    <h2>{{title }}</h2> 
-    <img src="data:image/png;base64,{{ chart }}" alt="Chart">
+    <h1>{{ title }}</h1>
+    <button id="show-graph-button">Show Graph</button>
+    <div id="chart" style="display: none;">
+        <img src="data:image/png;base64,{{ chart }}" alt="Plot">
+    </div>
+
+    <script>
+        document.getElementById("show-graph-button").addEventListener("click", function() {
+            document.getElementById("chart").style.display = "block";
+            this.style.display = "none"; // Hide the "Show Graph" button
+        });
+    </script>
 </body>
 </html>
