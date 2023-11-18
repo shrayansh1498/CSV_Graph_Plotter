@@ -17,14 +17,22 @@
 <body>
     <h1>{{ title }}</h1>
     <button id="show-graph-button">Show Graph</button>
+    <button id="hide-graph-button" style="display: none;">Hide Graph</button>
     <div id="chart" style="display: none;">
         <img src="data:image/png;base64,{{ chart }}" alt="Plot">
     </div>
 
     <script>
         document.getElementById("show-graph-button").addEventListener("click", function() {
-            document.getElementById("chart").style.display = "block";
+            document.getElementById("chart").style.display = "block";   //show the graph
             this.style.display = "none"; // Hide the "Show Graph" button
+            document.getElementById("hide-graph-button").style.display = "block";   //show the "Hide Graph" button
+        });
+
+        document.getElementById("hide-graph-button").addEventListener("click", function() {
+            document.getElementById("chart").style.display = "none";    //hide the graph
+            document.getElementById("show-graph-button").style.display = "block";   //show the "Show Graph" button
+            document.getElementById("hide-graph-button").style.display = "none";    //hide the "Hide Graph" button
         });
     </script>
 </body>
