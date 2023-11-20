@@ -73,7 +73,7 @@ def index(request):
                 buffer = BytesIO()
                 plt.savefig(buffer, format='png')
                 plt.close()
-                chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
+                lineChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
                 # Bar Graph
                 plt.bar(plot_data[x_column], plot_data[y_column])
@@ -83,9 +83,19 @@ def index(request):
                 buffer = BytesIO()
                 plt.savefig(buffer, format='png')
                 plt.close()
-                chart1 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+                barChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-                return render(request, 'plot.html', {'title': title,'chart': chart, 'chart1': chart1})
+                # Scatter Graph
+                plt.scatter(plot_data[x_column], plot_data[y_column])
+                plt.xlabel(x_column)
+                plt.ylabel(y_column)
+
+                buffer = BytesIO()
+                plt.savefig(buffer, format='png')
+                plt.close()
+                scatterChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+                return render(request, 'plot.html', {'title': title,'lineChart': lineChart, 'barChart': barChart, 'scatterChart': scatterChart})
     else:
         form = CSVUploadForm()
     return render(request, 'upload.html', {'form': form, 'error_message' : error_message})
