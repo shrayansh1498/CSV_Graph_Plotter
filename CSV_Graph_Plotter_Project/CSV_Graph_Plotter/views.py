@@ -65,6 +65,7 @@ def index(request):
                     error_message = "No data points to plot."
                     return render(request, 'error.html', {'error_message': error_message})
 
+                # Line Graph
                 plt.plot(plot_data[x_column], plot_data[y_column],  marker='o', linestyle='-', markersize=3)
                 plt.xlabel(x_column)
                 plt.ylabel(y_column)
@@ -73,7 +74,18 @@ def index(request):
                 plt.savefig(buffer, format='png')
                 plt.close()
                 chart = base64.b64encode(buffer.getvalue()).decode('utf-8')
-                return render(request, 'plot.html', {'title': title,'chart': chart})
+
+                # Bar Graph
+                plt.bar(plot_data[x_column], plot_data[y_column])
+                plt.xlabel(x_column)
+                plt.ylabel(y_column)
+
+                buffer = BytesIO()
+                plt.savefig(buffer, format='png')
+                plt.close()
+                chart1 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+                return render(request, 'plot.html', {'title': title,'chart': chart, 'chart1': chart1})
     else:
         form = CSVUploadForm()
     return render(request, 'upload.html', {'form': form, 'error_message' : error_message})

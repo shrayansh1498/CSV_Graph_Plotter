@@ -16,6 +16,8 @@
 </head>
 <body>
     <h1>{{ title }}</h1>
+
+    <h2>Line Graph</h2>
     <button id="show-graph-button">Show Graph</button>
     <button id="hide-graph-button" style="display: none;">Hide Graph</button>
     <div id="chart" style="display: none;">
@@ -31,7 +33,6 @@
         </select>
     </div>
 
-    
 
     <script>
         document.getElementById("show-graph-button").addEventListener("click", function() {
@@ -61,5 +62,54 @@
         });
 
     </script>
+
+    {% comment %} Bar Graph {% endcomment %}
+
+    <h2>Bar Graph</h2>
+    <button id="show-bar-graph-button">Show Bar Graph</button>
+    <button id="hide-bar-graph-button" style="display: none;">Hide Bar Graph</button>
+    <div id="chart1" style="display: none;">
+        <img src="data:image/png;base64,{{ chart1 }}" alt="Plot">
+    </div>
+
+    <div id="download-bar-container" style="display: block;">
+        <button id="download-bar-graph-button" style="display: block;">Download Bar Graph</button>
+        <select id="download-bar-format">
+            <option value="png">PNG</option>
+            <option value="jpg">JPG</option>
+            <option value="svg">SVG</option>
+        </select>
+    </div>
+
+
+    <script>
+        document.getElementById("show-bar-graph-button").addEventListener("click", function() {
+            document.getElementById("chart1").style.display = "block";   //show the graph
+            this.style.display = "none"; // Hide the "Show Graph" button
+            document.getElementById("hide-bar-graph-button").style.display = "block";   //show the "Hide Graph" button
+            //document.getElementById("download-graph-button").style.display = "block";   //show the "Download Graph button"
+        });
+
+        document.getElementById("hide-bar-graph-button").addEventListener("click", function() {
+            document.getElementById("chart1").style.display = "none";    //hide the graph
+            document.getElementById("show-bar-graph-button").style.display = "block";   //show the "Show Graph" button
+            document.getElementById("hide-bar-graph-button").style.display = "none";    //hide the "Hide Graph" button
+            //document.getElementById("download-graph-button").style.display = "none";    //show the "Download Graph button"
+        });
+
+        document.getElementById("download-bar-graph-button").addEventListener("click", function() {
+            var selectedFormat = document.getElementById("download-bar-format").value;
+            var dataUrl = "data:image/" + selectedFormat + ";base64,{{ chart }}";
+            var fileName = "graph." + selectedFormat;
+            
+            // Create a link element to trigger the download
+            var link = document.createElement("a");
+            link.href = dataUrl;
+            link.download = fileName;
+            link.click();
+        });
+
+    </script>
+
 </body>
 </html>
