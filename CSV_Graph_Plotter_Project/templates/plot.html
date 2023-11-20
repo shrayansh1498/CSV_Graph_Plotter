@@ -161,7 +161,102 @@
     </script>
 
 
-    
+    {% comment %} Histogram Graph for X-column{% endcomment %}
+
+    <h2>Histogram Graph for {{x_column}} Column</h2>
+    <button id="show-histogram1-graph-button">Show Histogram Graph 1</button>
+    <button id="hide-histogram1-graph-button" style="display: none;">Hide Histogram Graph 1</button>
+    <div id="chart4" style="display: none;">
+        <img src="data:image/png;base64,{{ histogramChart1 }}" alt="Plot">
+    </div>
+
+    <div id="download-histogram1-graph-container" style="display: block;">
+        <button id="download-histogram1-graph-button" style="display: block;">Download Histogram Graph 1</button>
+        <select id="download-histogram1-graph-format">
+            <option value="png">PNG</option>
+            <option value="jpg">JPG</option>
+            <option value="svg">SVG</option>
+        </select>
+    </div>
+
+
+    <script>
+        document.getElementById("show-histogram1-graph-button").addEventListener("click", function() {
+            document.getElementById("chart4").style.display = "block";   //show the graph
+            this.style.display = "none"; // Hide the "Show Graph" button
+            document.getElementById("hide-histogram1-graph-button").style.display = "block";   //show the "Hide Graph" button
+            //document.getElementById("download-graph-button").style.display = "block";   //show the "Download Graph button"
+        });
+
+        document.getElementById("hide-histogram1-graph-button").addEventListener("click", function() {
+            document.getElementById("chart4").style.display = "none";    //hide the graph
+            document.getElementById("show-histogram1-graph-button").style.display = "block";   //show the "Show Graph" button
+            document.getElementById("hide-histogram1-graph-button").style.display = "none";    //hide the "Hide Graph" button
+            //document.getElementById("download-graph-button").style.display = "none";    //show the "Download Graph button"
+        });
+
+        document.getElementById("download-histogram1-graph-button").addEventListener("click", function() {
+            var selectedFormat = document.getElementById("download-histogram1-graph-format").value;
+            var dataUrl = "data:image/" + selectedFormat + ";base64,{{ histogramChart1 }}";
+            var fileName = "histogramGraph1." + selectedFormat;
+            
+            // Create a link element to trigger the download
+            var link = document.createElement("a");
+            link.href = dataUrl;
+            link.download = fileName;
+            link.click();
+        });
+
+    </script>
+
+
+    {% comment %} Histogram Graph for Y-column{% endcomment %}
+
+    <h2>Histogram Graph for {{y_column}} Column</h2>
+    <button id="show-histogram2-graph-button">Show Histogram Graph 2</button>
+    <button id="hide-histogram2-graph-button" style="display: none;">Hide Histogram Graph 2</button>
+    <div id="chart5" style="display: none;">
+        <img src="data:image/png;base64,{{ histogramChart2 }}" alt="Plot">
+    </div>
+
+    <div id="download-histogram2-graph-container" style="display: block;">
+        <button id="download-histogram2-graph-button" style="display: block;">Download Histogram Graph 2</button>
+        <select id="download-histogram2-graph-format">
+            <option value="png">PNG</option>
+            <option value="jpg">JPG</option>
+            <option value="svg">SVG</option>
+        </select>
+    </div>
+
+
+    <script>
+        document.getElementById("show-histogram2-graph-button").addEventListener("click", function() {
+            document.getElementById("chart5").style.display = "block";   //show the graph
+            this.style.display = "none"; // Hide the "Show Graph" button
+            document.getElementById("hide-histogram2-graph-button").style.display = "block";   //show the "Hide Graph" button
+            //document.getElementById("download-graph-button").style.display = "block";   //show the "Download Graph button"
+        });
+
+        document.getElementById("hide-histogram2-graph-button").addEventListener("click", function() {
+            document.getElementById("chart5").style.display = "none";    //hide the graph
+            document.getElementById("show-histogram2-graph-button").style.display = "block";   //show the "Show Graph" button
+            document.getElementById("hide-histogram2-graph-button").style.display = "none";    //hide the "Hide Graph" button
+            //document.getElementById("download-graph-button").style.display = "none";    //show the "Download Graph button"
+        });
+
+        document.getElementById("download-histogram2-graph-button").addEventListener("click", function() {
+            var selectedFormat = document.getElementById("download-histogram2-graph-format").value;
+            var dataUrl = "data:image/" + selectedFormat + ";base64,{{ histogramChart2 }}";
+            var fileName = "histogramGraph2." + selectedFormat;
+            
+            // Create a link element to trigger the download
+            var link = document.createElement("a");
+            link.href = dataUrl;
+            link.download = fileName;
+            link.click();
+        });
+
+    </script>
 
 </body>
 </html>

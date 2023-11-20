@@ -30,12 +30,6 @@ def index(request):
             try:
                 data = pd.read_csv(uploaded_csv.csv_file)
 
-                # if the CSV has only one column i.e. then it will run
-                if len(data.columns) == 1: 
-                    error_message = "The uploaded CSV file contains only one column. Please upload a CSV file with multiple columns."
-                    return render(request, 'error.html', {'error_message': error_message})
-
-
             # if the CSV has no columns i.e. no data, then it will run
             except pd.errors.EmptyDataError:
                 error_message = "The uploaded CSV file has no data. Please upload a valid CSV file."
@@ -95,7 +89,33 @@ def index(request):
                 plt.close()
                 scatterChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-                return render(request, 'plot.html', {'title': title,'lineChart': lineChart, 'barChart': barChart, 'scatterChart': scatterChart})
+                # Histogram Graph for X axis
+                r = 10
+                if pd.api.types.is_numeric_dtype(plot_data[x_column]):
+                    r = range(min(plot_data[x_column]), max(plot_data[x_column]) + 2)
+                plt.hist(plot_data[x_column], bins=r, align='left')
+                plt.xlabel(x_column)
+                plt.ylabel("Frequency")
+
+                buffer = BytesIO()
+                plt.savefig(buffer, format='png')
+                plt.close()
+                histogramChart1 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+                # Histogram Graph for Y axis
+                r = 10
+                if pd.api.types.is_numeric_dtype(plot_data[y_column]):
+                    r = range(int(min(plot_data[y_column])), int(max(plot_data[y_column])) + 2)
+                plt.hist(plot_data[y_column], bins=r, align='left')
+                plt.xlabel(y_column)
+                plt.ylabel("Frequency")
+
+                buffer = BytesIO()
+                plt.savefig(buffer, format='png')
+                plt.close()
+                histogramChart2 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+                return render(request, 'plot.html', {'title': title,'lineChart': lineChart, 'barChart': barChart, 'scatterChart': scatterChart, 'histogramChart1': histogramChart1,'x_column': x_column, 'histogramChart2': histogramChart2, 'y_column': y_column})
     else:
         form = CSVUploadForm()
     return render(request, 'upload.html', {'form': form, 'error_message' : error_message})
