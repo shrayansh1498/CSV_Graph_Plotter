@@ -21,18 +21,29 @@
     <div id="chart" style="display: none;">
         <img src="data:image/png;base64,{{ chart }}" alt="Plot">
     </div>
+    <button id="download-graph-button" style="display: none;">Download Graph</button>
 
     <script>
         document.getElementById("show-graph-button").addEventListener("click", function() {
             document.getElementById("chart").style.display = "block";   //show the graph
             this.style.display = "none"; // Hide the "Show Graph" button
             document.getElementById("hide-graph-button").style.display = "block";   //show the "Hide Graph" button
+            document.getElementById("download-graph-button").style.display = "block";   //show the "Download Graph button"
         });
 
         document.getElementById("hide-graph-button").addEventListener("click", function() {
             document.getElementById("chart").style.display = "none";    //hide the graph
             document.getElementById("show-graph-button").style.display = "block";   //show the "Show Graph" button
             document.getElementById("hide-graph-button").style.display = "none";    //hide the "Hide Graph" button
+            document.getElementById("download-graph-button").style.display = "none";    //show the "Download Graph button"
+        });
+
+        document.getElementById("download-graph-button").addEventListener("click", function() {
+            // Create a link element to trigger the download
+            var link = document.createElement("a");
+            link.href = "data:image/png;base64,{{ chart }}";
+            link.download = "graph.png";
+            link.click();
         });
     </script>
 </body>
