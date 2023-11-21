@@ -11,7 +11,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
-from .forms import CSVUploadForm
+from .forms import CSVUploadForm, CreateUserForm
 import pandas as pd
 import matplotlib.pyplot as plt
 from io import BytesIO
@@ -137,9 +137,9 @@ def signup(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request, f'Account created for {username}. You can now log in.')
-            return redirect('')
+            # username = form.cleaned_data.get('username')
+            messages.success(request, 'Account has been Created. You can now log in.')
+            return redirect("/")
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form': form})

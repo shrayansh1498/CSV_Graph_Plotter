@@ -5,10 +5,10 @@
 </head>
 <body>
     <h1>Upload a CSV File</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Upload and Plot</button>
+        <button type="submit">Register</button>
     </form>
 </body>
 </html>
