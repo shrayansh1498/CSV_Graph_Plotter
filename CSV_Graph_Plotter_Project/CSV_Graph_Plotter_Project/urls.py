@@ -22,4 +22,5 @@ urlpatterns = [
     path('about', include('CSV_Graph_Plotter.urls')),
     path('services', include('CSV_Graph_Plotter.urls')),
     path('contact', include('CSV_Graph_Plotter.urls')),
+    path('signup', include('CSV_Graph_Plotter.urls')),
 ]

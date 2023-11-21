@@ -9,6 +9,8 @@
 #     # return HttpResponse("This is Home page")
 
 from django.shortcuts import render, redirect, HttpResponse
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 from .forms import CSVUploadForm
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -129,3 +131,15 @@ def services(request):
 
 def contact(request):
     return HttpResponse("This is contact page")
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Account created for {username}. You can now log in.')
+            return redirect('')
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})
