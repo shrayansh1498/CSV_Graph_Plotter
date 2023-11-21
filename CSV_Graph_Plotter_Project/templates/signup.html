@@ -7,7 +7,20 @@
     <h1>Upload a CSV File</h1>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{form.username.label}}
+        {{form.username}}
+        
+        {{form.email.label}}
+        {{form.email}}
+
+        {{form.password1.label}}
+        {{form.password1}}
+
+        {{form.password2.label}}
+        {{form.password2}}
+
+        {{form.errors}}
+
         <button type="submit">Register</button>
     </form>
 </body>

@@ -134,12 +134,12 @@ def contact(request):
 
 def signup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
             # username = form.cleaned_data.get('username')
-            messages.success(request, 'Account has been Created. You can now log in.')
+            messages.success(request, 'Your account has been successfully Created.')
             return redirect("/")
     else:
-        form = UserCreationForm()
+        form = CreateUserForm()
     return render(request, 'signup.html', {'form': form})
