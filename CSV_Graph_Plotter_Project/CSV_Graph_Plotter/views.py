@@ -42,6 +42,9 @@ def index(request):
             # y_column = request.POST.get('y_column')
             x_column = uploaded_csv.x_column
             y_column = uploaded_csv.y_column
+            x1_column = uploaded_csv.x1_column
+            x2_column = uploaded_csv.x2_column
+            x3_column = uploaded_csv.x3_column
 
             # Check if x and y columns exist in the data
             if x_column not in data.columns:
@@ -65,6 +68,13 @@ def index(request):
                 plt.plot(plot_data[x_column], plot_data[y_column],  marker='o', linestyle='-', markersize=3)
                 plt.xlabel(x_column)
                 plt.ylabel(y_column)
+                if x1_column:
+                    plt.plot(plot_data[x1_column], plot_data[y_column],  marker='o', linestyle='-', markersize=3)
+                if x2_column:
+                    plt.plot(plot_data[x2_column], plot_data[y_column],  marker='o', linestyle='-', markersize=3)
+                if x3_column:
+                    plt.plot(plot_data[x3_column], plot_data[y_column],  marker='o', linestyle='-', markersize=3)
+                    
 
                 buffer = BytesIO()
                 plt.savefig(buffer, format='png')
