@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
 from django.contrib import messages #for error display
+import numpy as np
 
 def index(request):
     error_message = None  # Initialize error_message as None
@@ -42,92 +43,117 @@ def index(request):
             # y_column = request.POST.get('y_column')
             x_column = uploaded_csv.x_column
             y_column = uploaded_csv.y_column
-            x1_column = uploaded_csv.x1_column
-            x2_column = uploaded_csv.x2_column
-            x3_column = uploaded_csv.x3_column
+            y1_column = uploaded_csv.y1_column
+            y2_column = uploaded_csv.y2_column
+            y3_column = uploaded_csv.y3_column
 
             # Check if x and y columns exist in the data
             if x_column not in data.columns:
                 error_message = "The specified X column does not exist in the CSV file. Please enter correct column name."
                 return render(request, 'error.html', {'error_message': error_message})
             
-            elif y_column not in data.columns:
+            if y_column not in data.columns:
                 error_message = "The specified Y column does not exist in the CSV file. Please enter correct column name."
                 return render(request, 'error.html', {'error_message': error_message})
             
-            else:
-                #dropna is used to skip row in case any of the column contains null value
-                plot_data = data.dropna(subset=[x_column, y_column])
-
-                # Check if there are data points to plot
-                if plot_data.empty:
-                    error_message = "No data points to plot."
+            if y1_column:
+                if y1_column not in data.columns:
+                    error_message = "The specified X1 column does not exist in the CSV file. Please enter correct column name."
                     return render(request, 'error.html', {'error_message': error_message})
 
-                # Line Graph
-                plt.plot(plot_data[x_column], plot_data[y_column],  marker='o', linestyle='-', markersize=3)
-                plt.xlabel(x_column)
-                plt.ylabel(y_column)
-                if x1_column:
-                    plt.plot(plot_data[x1_column], plot_data[y_column],  marker='o', linestyle='-', markersize=3)
-                if x2_column:
-                    plt.plot(plot_data[x2_column], plot_data[y_column],  marker='o', linestyle='-', markersize=3)
-                if x3_column:
-                    plt.plot(plot_data[x3_column], plot_data[y_column],  marker='o', linestyle='-', markersize=3)
-                    
+            if y2_column:
+                if y2_column not in data.columns:
+                    error_message = "The specified X2 column does not exist in the CSV file. Please enter correct column name."
+                    return render(request, 'error.html', {'error_message': error_message})
 
-                buffer = BytesIO()
-                plt.savefig(buffer, format='png')
-                plt.close()
-                lineChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            if y3_column:
+                if y3_column not in data.columns:
+                    error_message = "The specified X3 column does not exist in the CSV file. Please enter correct column name."
+                    return render(request, 'error.html', {'error_message': error_message})
+            
+            
+            #dropna is used to skip row in case any of the column contains null value
+            plot_data = data.dropna(subset=[x_column, y_column])
 
-                # Bar Graph
-                plt.bar(plot_data[x_column], plot_data[y_column])
-                plt.xlabel(x_column)
-                plt.ylabel(y_column)
+            # Check if there are data points to plot
+            if plot_data.empty:
+                error_message = "No data points to plot."
+                return render(request, 'error.html', {'error_message': error_message})
 
-                buffer = BytesIO()
-                plt.savefig(buffer, format='png')
-                plt.close()
-                barChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            # Line Graph
+            plt.plot(plot_data[x_column], plot_data[y_column],  marker='o', linestyle='-', markersize=3)
+            plt.xlabel(x_column)
+            plt.ylabel(y_column)
+            if y1_column:
+                plot_data1 = data.dropna(subset=[x_column, y1_column])
+                plt.plot(plot_data1[x_column], plot_data1[y1_column],  marker='o', linestyle='-', markersize=3)
+            if y2_column:
+                plot_data2 = data.dropna(subset=[x_column, y2_column])
+                plt.plot(plot_data2[x_column], plot_data2[y2_column],  marker='o', linestyle='-', markersize=3)
+            if y3_column:
+                plot_data3 = data.dropna(subset=[x_column, y3_column])
+                plt.plot(plot_data3[x_column], plot_data3[y3_column],  marker='o', linestyle='-', markersize=3)
+                
 
-                # Scatter Graph
-                plt.scatter(plot_data[x_column], plot_data[y_column])
-                plt.xlabel(x_column)
-                plt.ylabel(y_column)
+            buffer = BytesIO()
+            plt.savefig(buffer, format='png')
+            plt.close()
+            lineChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-                buffer = BytesIO()
-                plt.savefig(buffer, format='png')
-                plt.close()
-                scatterChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            # Bar Graph
+            plt.bar(plot_data[x_column], plot_data[y_column])
+            plt.xlabel(x_column)
+            plt.ylabel(y_column)
 
-                # Histogram Graph for X axis
-                r = 10
-                if pd.api.types.is_numeric_dtype(plot_data[x_column]):
-                    r = range(min(plot_data[x_column]), max(plot_data[x_column]) + 2)
-                plt.hist(plot_data[x_column], bins=r, align='left')
-                plt.xlabel(x_column)
-                plt.ylabel("Frequency")
+            # if x1_column:
+            #     plt.bar(plot_data[x1_column], plot_data[y_column])
+            # if x2_column:
+            #     plt.bar(plot_data[x2_column], plot_data[y_column])
+            # if x3_column:
+            #     plt.bar(plot_data[x3_column], plot_data[y_column])
 
-                buffer = BytesIO()
-                plt.savefig(buffer, format='png')
-                plt.close()
-                histogramChart1 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            buffer = BytesIO()
+            plt.savefig(buffer, format='png')
+            plt.close()
+            barChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-                # Histogram Graph for Y axis
-                r = 10
-                if pd.api.types.is_numeric_dtype(plot_data[y_column]):
-                    r = range(int(min(plot_data[y_column])), int(max(plot_data[y_column])) + 2)
-                plt.hist(plot_data[y_column], bins=r, align='left')
-                plt.xlabel(y_column)
-                plt.ylabel("Frequency")
+            # Scatter Graph
+            plt.scatter(plot_data[x_column], plot_data[y_column])
+            plt.xlabel(x_column)
+            plt.ylabel(y_column)
 
-                buffer = BytesIO()
-                plt.savefig(buffer, format='png')
-                plt.close()
-                histogramChart2 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            buffer = BytesIO()
+            plt.savefig(buffer, format='png')
+            plt.close()
+            scatterChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-                return render(request, 'plot.html', {'title': title,'lineChart': lineChart, 'barChart': barChart, 'scatterChart': scatterChart, 'histogramChart1': histogramChart1,'x_column': x_column, 'histogramChart2': histogramChart2, 'y_column': y_column})
+            # Histogram Graph for X axis
+            r = 10
+            if pd.api.types.is_numeric_dtype(plot_data[x_column]):
+                r = np.arange(min(plot_data[x_column]), max(plot_data[x_column]) + 2)
+            plt.hist(plot_data[x_column], bins=r, align='left')
+            plt.xlabel(x_column)
+            plt.ylabel("Frequency")
+
+            buffer = BytesIO()
+            plt.savefig(buffer, format='png')
+            plt.close()
+            histogramChart1 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+            # Histogram Graph for Y axis
+            r = 10
+            if pd.api.types.is_numeric_dtype(plot_data[y_column]):
+                r = range(int(min(plot_data[y_column])), int(max(plot_data[y_column])) + 2)
+            plt.hist(plot_data[y_column], bins=r, align='left')
+            plt.xlabel(y_column)
+            plt.ylabel("Frequency")
+
+            buffer = BytesIO()
+            plt.savefig(buffer, format='png')
+            plt.close()
+            histogramChart2 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+            return render(request, 'plot.html', {'title': title,'lineChart': lineChart, 'barChart': barChart, 'scatterChart': scatterChart, 'histogramChart1': histogramChart1,'x_column': x_column, 'histogramChart2': histogramChart2, 'y_column': y_column})
     else:
         form = CSVUploadForm()
     return render(request, 'upload.html', {'form': form, 'error_message' : error_message})
