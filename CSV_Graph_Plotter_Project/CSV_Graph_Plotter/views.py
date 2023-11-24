@@ -247,12 +247,12 @@ def signup(request):
             form.save()
             # username = form.cleaned_data.get('username')
             messages.success(request, 'Your account has been successfully Created.')
-            return redirect('login.html')
+            return redirect('/login')
     else:
         form = CreateUserForm()
     return render(request, 'signup.html', {'form': form})
 
-def login(request):
+def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -261,10 +261,14 @@ def login(request):
 
         if user is not None:
             login(request, user)
-            return redirect('/')
+            return redirect('')         #if login successful, redirect to home page
         else:
             messages.info(request, "Username or Password is incorrect")
             return render(request, 'login.html')
 
     else:
         return render(request, 'login.html')
+    
+def logout_user(request):
+    logout(request)
+    return redirect('/login')
