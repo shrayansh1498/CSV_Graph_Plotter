@@ -1,0 +1,137 @@
+
+  #se{
+    height: 500px;
+  }
+
+  nav {
+  height: 40px;
+  background-color: rgb(112, 22, 54);
+  }
+
+  nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  float: right;
+  margin-top: 10px;
+  margin-right: 20px;
+  }
+
+  nav ul li{
+  list-style-type: none;
+  margin: 0 23px;
+  float: right;
+  margin-right: 50px;
+  }
+
+  nav ul li a{
+  text-decoration: none;
+  color: white;
+  }
+
+  nav ul li a:hover{
+  color: rgb(142, 161, 223);
+  }
+
+  #desc{
+    margin-top: 30px;
+  }
+
+  .n1{
+    font-size: 1.2rem;
+  }
+
+  .f1{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 23px;
+  }
+
+  .f1 div{
+    width: 40%;
+    font-size: 11pt;
+  }
+
+
+  .r1 img{
+    margin-top: 10px;
+    width: 90%;
+  }
+
+  #vid1{
+    margin-top: 40px;
+    margin-left: 140px;
+  }
+  #vid2{
+    margin-top: 90px;
+  }
+
+  #container1{
+    text-align: right;
+  }
+  #container2{
+    text-align: center;
+  }
+  #container3{
+    text-align: left;
+  }
+
+
+  table{
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-around;
+    text-align: left;
+  }
+
+  table tr th:first-child {
+  width: 100px;
+  al
+  }
+  table tr th:nth-child(2) {
+    width: 250px;
+  }
+  table tr th:nth-child(3) {
+    width: 200px;
+  }
+  table tr th:last-child {
+    width: 200px;
+  }
+
+  table tr td:first-child {
+    width: 100px;
+  }
+  table tr td:nth-child(2) {
+    width: 200px;
+  }
+  table tr td:nth-child(3) {
+    width: 100px;
+  }
+  table tr td:last-child {
+    width: 100px;
+  }
+
+  .hob{
+    margin-left: 20px;
+    font-size: 15pt;
+  }
+
+  #ed{
+    font-size: 15pt;
+    float: center;
+  }
+
+  .p{
+    text-align: left;
+    margin-left: 30px;
+    margin-top: 40px;
+  }
+
+  footer{
+    margin-top: 50px;
+    font-size: 20pt;
+    text-align: center;
+
+  }
+
+  

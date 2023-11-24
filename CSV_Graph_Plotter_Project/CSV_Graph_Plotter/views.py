@@ -228,7 +228,7 @@ def index(request):
 
     else:
         form = CSVUploadForm()
-    return render(request, 'upload.html', {'form': form, 'error_message' : error_message})
+    return render(request, 'index.html', {'form': form, 'error_message' : error_message})
 
 
 def about(request):

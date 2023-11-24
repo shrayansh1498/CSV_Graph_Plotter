@@ -8,13 +8,23 @@
     <img src="data:image/png;base64,{{ chart }}" alt="Chart">
 </body>
 </html>  {% endcomment %}
-
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>CSV Graph Plotter - Plot</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
+    <header>
+        <nav class="n1">
+          <ul>       
+            <li><a href="/">Logout/Login</a></li>
+            <li><a href="/">Home</a></li>
+          </ul>
+        </nav>
+    </header>
+    
     <h1>{{ title }}</h1>
 
     <h2>Line Graph</h2>
