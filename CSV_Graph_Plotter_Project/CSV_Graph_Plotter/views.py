@@ -101,16 +101,26 @@ def index(request):
             lineChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
             # Bar Graph
-            plt.bar(plot_data[x_column], plot_data[y_column])
+            bar_width = 0.2  # Adjust the width of the bars
+            
+            plt.bar(plot_data[x_column], plot_data[y_column], width=bar_width, label=y_column)
             plt.xlabel(x_column)
             plt.ylabel(y_column)
 
-            # if x1_column:
-            #     plt.bar(plot_data[x1_column], plot_data[y_column])
-            # if x2_column:
-            #     plt.bar(plot_data[x2_column], plot_data[y_column])
-            # if x3_column:
-            #     plt.bar(plot_data[x3_column], plot_data[y_column])
+            # if y1_column:
+            #     plt.bar(plot_data[x_column], plot_data[y1_column])
+            # if y2_column:
+            #     plt.bar(plot_data[x_column], plot_data[y2_column])
+            # if y3_column:
+            #     plt.bar(plot_data[x_column], plot_data[y3_column])
+
+            if y1_column:
+                plt.bar(np.array(plot_data[x_column]) + bar_width, plot_data[y1_column], width=bar_width, label=y1_column)
+            if y2_column:
+                plt.bar(np.array(plot_data[x_column]) + 2*bar_width, plot_data[y2_column], width=bar_width, label=y2_column)
+            if y3_column:
+                plt.bar(np.array(plot_data[x_column]) + 3*bar_width, plot_data[y3_column], width=bar_width, label=y3_column)
+
 
             buffer = BytesIO()
             plt.savefig(buffer, format='png')
