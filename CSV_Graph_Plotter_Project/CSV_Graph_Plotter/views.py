@@ -179,7 +179,36 @@ def index(request):
             histogramChart2 = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
 
-            return render(request, 'plot.html', {'title': title,'lineChart': lineChart, 'barChart': barChart, 'scatterChart': scatterChart, 'histogramChart1': histogramChart1,'x_column': x_column, 'histogramChart2': histogramChart2, 'y_column': y_column})
+            # Histogram Graph for Y1-column
+            if y1_column and not plot_data1.empty:  # Check if y1_column is not blank and plot_data1 is not empty
+                r = 10
+                plt.hist(plot_data1[y1_column], bins=r, align='left')
+                plt.xlabel(y1_column)
+                plt.ylabel("Frequency")
+
+                buffer = BytesIO()
+                plt.savefig(buffer, format='png')
+                plt.close()
+                histogramChart3 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            else:
+                histogramChart3 = None  # Set to None if no histogram is plotted
+
+            # Histogram Graph for Y2-column
+            if y2_column and not plot_data2.empty:  # Check if y1_column is not blank and plot_data1 is not empty
+                r = 10
+                plt.hist(plot_data1[y2_column], bins=r, align='left')
+                plt.xlabel(y2_column)
+                plt.ylabel("Frequency")
+
+                buffer = BytesIO()
+                plt.savefig(buffer, format='png')
+                plt.close()
+                histogramChart4 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            else:
+                histogramChart4 = None  # Set to None if no histogram is plotted
+
+
+            return render(request, 'plot.html', {'title': title,'lineChart': lineChart, 'barChart': barChart, 'scatterChart': scatterChart, 'histogramChart1': histogramChart1,'x_column': x_column, 'histogramChart2': histogramChart2, 'y_column': y_column, 'histogramChart3': histogramChart3, 'y1_column': y1_column, 'histogramChart4': histogramChart4, 'y2_column': y2_column})
 
     else:
         form = CSVUploadForm()
