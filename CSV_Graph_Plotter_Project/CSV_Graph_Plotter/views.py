@@ -63,17 +63,17 @@ def index(request):
             
             if y1_column:
                 if y1_column not in data.columns:
-                    error_message = "The specified X1 column does not exist in the CSV file. Please enter correct column name."
+                    error_message = "The specified Y1 column does not exist in the CSV file. Please enter correct column name."
                     return render(request, 'error.html', {'error_message': error_message})
 
             if y2_column:
                 if y2_column not in data.columns:
-                    error_message = "The specified X2 column does not exist in the CSV file. Please enter correct column name."
+                    error_message = "The specified Y2 column does not exist in the CSV file. Please enter correct column name."
                     return render(request, 'error.html', {'error_message': error_message})
 
             if y3_column:
                 if y3_column not in data.columns:
-                    error_message = "The specified X3 column does not exist in the CSV file. Please enter correct column name."
+                    error_message = "The specified Y3 column does not exist in the CSV file. Please enter correct column name."
                     return render(request, 'error.html', {'error_message': error_message})
             
             
@@ -86,18 +86,23 @@ def index(request):
                 return render(request, 'error.html', {'error_message': error_message})
 
             # Line Graph
-            plt.plot(plot_data[x_column], plot_data[y_column],  marker='o', linestyle='-', markersize=3)
+            plt.figure(figsize=(15, 10))
+            plt.plot(plot_data[x_column], plot_data[y_column], label=y_column, marker='o', linestyle='-', markersize=3)
+            plt.legend()
             plt.xlabel(x_column)
             plt.ylabel(y_column)
             if y1_column:
                 plot_data1 = data.dropna(subset=[x_column, y1_column])
-                plt.plot(plot_data1[x_column], plot_data1[y1_column],  marker='o', linestyle='-', markersize=3)
+                plt.plot(plot_data1[x_column], plot_data1[y1_column], label=y1_column, marker='o', linestyle='-', markersize=3)
+                plt.legend()
             if y2_column:
                 plot_data2 = data.dropna(subset=[x_column, y2_column])
-                plt.plot(plot_data2[x_column], plot_data2[y2_column],  marker='o', linestyle='-', markersize=3)
+                plt.plot(plot_data2[x_column], plot_data2[y2_column], label=y2_column, marker='o', linestyle='-', markersize=3)
+                plt.legend()
             if y3_column:
                 plot_data3 = data.dropna(subset=[x_column, y3_column])
-                plt.plot(plot_data3[x_column], plot_data3[y3_column],  marker='o', linestyle='-', markersize=3)
+                plt.plot(plot_data3[x_column], plot_data3[y3_column], label=y3_column, marker='o', linestyle='-', markersize=3)
+                plt.legend()
                 
 
             buffer = BytesIO()
@@ -108,8 +113,9 @@ def index(request):
 
             # Bar Graph
             bar_width = 0.2  # Adjust the width of the bars
-
+            plt.figure(figsize=(15, 10))
             plt.bar(plot_data[x_column], plot_data[y_column], width=bar_width, label=y_column)
+            plt.legend()
             plt.xlabel(x_column)
             plt.ylabel(y_column)
 
@@ -124,13 +130,16 @@ def index(request):
             if y1_column:
                 # if type(y1_column[0]) == str:
                 #     y1_column = np.arange(len(y1_column))
-                plt.bar(np.array(plot_data1[x_column]) + bar_width, plot_data1[y1_column], width=bar_width, label=y1_column)
+                plt.bar(np.array(plot_data1[x_column])+ n*bar_width , plot_data1[y1_column], width=bar_width, label=y1_column)
+                plt.legend()
                 n+=1
             if y2_column:
-                plt.bar(np.array(plot_data2[x_column]) + n*bar_width, plot_data2[y2_column], width=bar_width, label=y2_column)
+                plt.bar(np.array(plot_data2[x_column])+ n*bar_width , plot_data2[y2_column], width=bar_width, label=y2_column)
+                plt.legend()
                 n+=1
             if y3_column:
-                plt.bar(np.array(plot_data3[x_column]) + n*bar_width, plot_data3[y3_column], width=bar_width, label=y3_column)
+                plt.bar(np.array(plot_data3[x_column])+ n*bar_width , plot_data3[y3_column], width=bar_width, label=y3_column)
+                plt.legend()
 
 
             buffer = BytesIO()
@@ -140,16 +149,22 @@ def index(request):
 
 
             # Scatter Graph
-            plt.scatter(plot_data[x_column], plot_data[y_column])
+            plt.figure(figsize=(15, 10))
+            plt.scatter(plot_data[x_column], plot_data[y_column], label=y_column)
+            plt.legend()
             plt.xlabel(x_column)
             plt.ylabel(y_column)
+            
 
             if y1_column:
-                plt.scatter(np.array(plot_data1[x_column]), plot_data1[y1_column])
+                plt.scatter(np.array(plot_data1[x_column]), plot_data1[y1_column], label=y1_column)
+                plt.legend()
             if y2_column:
-                plt.scatter(np.array(plot_data2[x_column]), plot_data2[y2_column])
+                plt.scatter(np.array(plot_data2[x_column]), plot_data2[y2_column], label=y2_column)
+                plt.legend()
             if y3_column:
-                plt.scatter(np.array(plot_data3[x_column]), plot_data3[y3_column])
+                plt.scatter(np.array(plot_data3[x_column]), plot_data3[y3_column], label=y3_column)
+                plt.legend()
 
             buffer = BytesIO()
             plt.savefig(buffer, format='png')
@@ -157,12 +172,13 @@ def index(request):
             scatterChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
             # Histogram Graph for X axis
-            r = 10
-            # if pd.api.types.is_numeric_dtype(plot_data[x_column]):
-            #     r = np.arange(min(plot_data[x_column]), max(plot_data[x_column]) + 2)
-            plt.hist(plot_data[x_column], bins=r, align='left')
+            x_column_name = uploaded_csv.x_column
+            x_values = plot_data[x_column_name].dropna()    
+            plt.figure(figsize=(15, 10))
+            hist, bin_edges, _ = plt.hist(x_values, bins=np.unique(x_values), align='mid', ec='black')
             plt.xlabel(x_column)
             plt.ylabel("Frequency")
+            plt.xticks(bin_edges)
 
             buffer = BytesIO()
             plt.savefig(buffer, format='png')
@@ -170,12 +186,14 @@ def index(request):
             histogramChart1 = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
             # Histogram Graph for Y axis
-            r = 10
-            # if pd.api.types.is_numeric_dtype(plot_data[y_column]):
-            #     r = np.arange(min(plot_data[y_column]), max(plot_data[y_column]) + 1000, 1000)
-            plt.hist(plot_data[y_column], bins=r, align='left')
+
+            y_column_name = uploaded_csv.y_column
+            y_values = plot_data[y_column_name].dropna()    
+            plt.figure(figsize=(15, 10))
+            hist, bin_edges, _ = plt.hist(y_values, bins=np.unique(y_values), align='mid', ec='black')
             plt.xlabel(y_column)
             plt.ylabel("Frequency")
+            plt.xticks(bin_edges)
 
             buffer = BytesIO()
             plt.savefig(buffer, format='png')
@@ -186,10 +204,14 @@ def index(request):
 
             # Histogram Graph for Y1-column
             if y1_column and not plot_data1.empty:  # Check if y1_column is not blank and plot_data1 is not empty
-                r = 10
-                plt.hist(plot_data1[y1_column], bins=r, align='left')
+
+                y1_column_name = uploaded_csv.y1_column
+                y1_values = plot_data[y1_column_name].dropna()    
+                plt.figure(figsize=(15, 10))
+                hist, bin_edges, _ = plt.hist(y1_values, bins=np.unique(y1_values), align='mid', ec='black')
                 plt.xlabel(y1_column)
                 plt.ylabel("Frequency")
+                plt.xticks(bin_edges)
 
                 buffer = BytesIO()
                 plt.savefig(buffer, format='png')
@@ -200,10 +222,13 @@ def index(request):
 
             # Histogram Graph for Y2-column
             if y2_column and not plot_data2.empty:  # Check if y1_column is not blank and plot_data1 is not empty
-                r = 10
-                plt.hist(plot_data2[y2_column], bins=r, align='left')
+                y2_column_name = uploaded_csv.y2_column
+                y2_values = plot_data[y2_column_name].dropna()    
+                plt.figure(figsize=(15, 10))
+                hist, bin_edges, _ = plt.hist(y2_values, bins=np.unique(y2_values), align='mid', ec='black')
                 plt.xlabel(y2_column)
                 plt.ylabel("Frequency")
+                plt.xticks(bin_edges)
 
                 buffer = BytesIO()
                 plt.savefig(buffer, format='png')
@@ -214,10 +239,13 @@ def index(request):
 
             # Histogram Graph for Y3-column
             if y3_column and not plot_data3.empty:  # Check if y1_column is not blank and plot_data1 is not empty
-                r = 10
-                plt.hist(plot_data3[y3_column], bins=r, align='left')
+                y3_column_name = uploaded_csv.y3_column
+                y3_values = plot_data[y3_column_name].dropna()    
+                plt.figure(figsize=(15, 10))
+                hist, bin_edges, _ = plt.hist(y3_values, bins=np.unique(y3_values), align='mid', ec='black')
                 plt.xlabel(y3_column)
                 plt.ylabel("Frequency")
+                plt.xticks(bin_edges)
 
                 buffer = BytesIO()
                 plt.savefig(buffer, format='png')
@@ -234,14 +262,14 @@ def index(request):
     return render(request, 'index.html', {'form': form, 'error_message' : error_message})
 
 
-def about(request):
-    return HttpResponse("This is about page")
+# def about(request):
+#     return HttpResponse("This is about page")
 
-def services(request):
-    return HttpResponse("This is services page")
+# def services(request):
+#     return HttpResponse("This is services page")
 
-def contact(request):
-    return HttpResponse("This is contact page")
+# def contact(request):
+#     return HttpResponse("This is contact page")
 
 def signup(request):
     if request.method == 'POST':
