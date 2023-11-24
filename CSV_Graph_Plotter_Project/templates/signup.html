@@ -7,21 +7,36 @@
     <h1>Signup</h1>
     <form method="post">
         {% csrf_token %}
-        {{form.username.label}}
-        {{form.username}}
+        <div>
+            {{form.username.label}}
+            {{form.username}}
+        </div>
         
-        {{form.email.label}}
-        {{form.email}}
+        <div>
+            {{form.email.label}}
+            {{form.email}}
+        </div>
 
+        <div>
         {{form.password1.label}}
         {{form.password1}}
+        </div>
 
-        {{form.password2.label}}
-        {{form.password2}}
+        <div>
+            {{form.password2.label}}
+            {{form.password2}}
+        </div>
 
+        {% comment %} any error in filled form will be thrown here {% endcomment %}
         {{form.errors}}
 
-        <button type="submit">Register</button>
+        <div>
+            <button type="submit">Register</button>
+        </div>
+
     </form>
+    <div>
+        Already have an account? <a href="/login">Login</a>
+    </div>
 </body>
 </html>

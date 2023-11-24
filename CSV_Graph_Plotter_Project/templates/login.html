@@ -11,6 +11,9 @@
         <div >
             <form method="POST" action="">
                 <div>
+                    {% csrf_token %}
+                </div>
+                <div>
                     <input type="text" name="username" placeholder="Username">
                 </div>
                 <div>
@@ -21,11 +24,11 @@
                     <input type="submit" value="Login">
                 </div>
             </form>
-        </div>
+        </div>  
 
         <div>
             <div>
-                Don't have an account? <a href="signup.html">Sign Up</a>
+                Don't have an account? <a href="/signup">Sign Up</a>
             </div>
         </div>
 </body>

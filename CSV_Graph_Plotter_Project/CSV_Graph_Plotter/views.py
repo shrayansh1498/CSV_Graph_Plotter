@@ -16,6 +16,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from io import BytesIO
 import base64
+
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages #for error display
 import numpy as np
 
@@ -245,7 +247,24 @@ def signup(request):
             form.save()
             # username = form.cleaned_data.get('username')
             messages.success(request, 'Your account has been successfully Created.')
-            return redirect("/")
+            return redirect('login.html')
     else:
         form = CreateUserForm()
     return render(request, 'signup.html', {'form': form})
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            messages.info(request, "Username or Password is incorrect")
+            return render(request, 'login.html')
+
+    else:
+        return render(request, 'login.html')

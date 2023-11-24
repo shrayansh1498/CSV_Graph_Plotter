@@ -19,8 +19,10 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('CSV_Graph_Plotter.urls')),
+    path('home', include('CSV_Graph_Plotter.urls')),
     path('about', include('CSV_Graph_Plotter.urls')),
     path('services', include('CSV_Graph_Plotter.urls')),
     path('contact', include('CSV_Graph_Plotter.urls')),
     path('signup', include('CSV_Graph_Plotter.urls')),
+    path('login', include('CSV_Graph_Plotter.urls')),
 ]
