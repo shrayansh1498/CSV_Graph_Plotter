@@ -275,3 +275,18 @@ def user_login(request):
 def logout_user(request):
     logout(request)
     return redirect('/login')
+
+
+
+
+def home(request):
+    error_message = None  # Initialize error_message as None
+    form = CSVUploadForm()
+    if request.method == 'POST':
+        form = CSVUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            return redirect('/login')
+
+    else:
+        form = CSVUploadForm()
+    return render(request, 'index.html', {'form': form, 'error_message' : error_message})
