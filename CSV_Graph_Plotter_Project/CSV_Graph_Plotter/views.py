@@ -18,9 +18,12 @@ from io import BytesIO
 import base64
 
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
 from django.contrib import messages #for error display
 import numpy as np
 
+@login_required(login_url='/login')
 def index(request):
     error_message = None  # Initialize error_message as None
     form = CSVUploadForm()
@@ -261,7 +264,7 @@ def user_login(request):
 
         if user is not None:
             login(request, user)
-            return redirect('')         #if login successful, redirect to home page
+            return redirect('/')         #if login successful, redirect to home page
         else:
             messages.info(request, "Username or Password is incorrect")
             return render(request, 'login.html')
