@@ -100,9 +100,10 @@ def index(request):
             plt.close()
             lineChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
+
             # Bar Graph
             bar_width = 0.2  # Adjust the width of the bars
-            
+
             plt.bar(plot_data[x_column], plot_data[y_column], width=bar_width, label=y_column)
             plt.xlabel(x_column)
             plt.ylabel(y_column)
@@ -113,13 +114,18 @@ def index(request):
             #     plt.bar(plot_data[x_column], plot_data[y2_column])
             # if y3_column:
             #     plt.bar(plot_data[x_column], plot_data[y3_column])
+            n=1
 
             if y1_column:
-                plt.bar(np.array(plot_data[x_column]) + bar_width, plot_data[y1_column], width=bar_width, label=y1_column)
+                # if type(y1_column[0]) == str:
+                #     y1_column = np.arange(len(y1_column))
+                plt.bar(np.array(plot_data1[x_column]) + bar_width, plot_data1[y1_column], width=bar_width, label=y1_column)
+                n+=1
             if y2_column:
-                plt.bar(np.array(plot_data[x_column]) + 2*bar_width, plot_data[y2_column], width=bar_width, label=y2_column)
+                plt.bar(np.array(plot_data2[x_column]) + n*bar_width, plot_data2[y2_column], width=bar_width, label=y2_column)
+                n+=1
             if y3_column:
-                plt.bar(np.array(plot_data[x_column]) + 3*bar_width, plot_data[y3_column], width=bar_width, label=y3_column)
+                plt.bar(np.array(plot_data3[x_column]) + n*bar_width, plot_data3[y3_column], width=bar_width, label=y3_column)
 
 
             buffer = BytesIO()
@@ -127,10 +133,18 @@ def index(request):
             plt.close()
             barChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
+
             # Scatter Graph
             plt.scatter(plot_data[x_column], plot_data[y_column])
             plt.xlabel(x_column)
             plt.ylabel(y_column)
+
+            if y1_column:
+                plt.scatter(np.array(plot_data1[x_column]), plot_data1[y1_column])
+            if y2_column:
+                plt.scatter(np.array(plot_data2[x_column]), plot_data2[y2_column])
+            if y3_column:
+                plt.scatter(np.array(plot_data3[x_column]), plot_data3[y3_column])
 
             buffer = BytesIO()
             plt.savefig(buffer, format='png')
@@ -139,8 +153,8 @@ def index(request):
 
             # Histogram Graph for X axis
             r = 10
-            if pd.api.types.is_numeric_dtype(plot_data[x_column]):
-                r = np.arange(min(plot_data[x_column]), max(plot_data[x_column]) + 2)
+            # if pd.api.types.is_numeric_dtype(plot_data[x_column]):
+            #     r = np.arange(min(plot_data[x_column]), max(plot_data[x_column]) + 2)
             plt.hist(plot_data[x_column], bins=r, align='left')
             plt.xlabel(x_column)
             plt.ylabel("Frequency")
@@ -152,8 +166,8 @@ def index(request):
 
             # Histogram Graph for Y axis
             r = 10
-            if pd.api.types.is_numeric_dtype(plot_data[y_column]):
-                r = range(int(min(plot_data[y_column])), int(max(plot_data[y_column])) + 2)
+            # if pd.api.types.is_numeric_dtype(plot_data[y_column]):
+            #     r = np.arange(min(plot_data[y_column]), max(plot_data[y_column]) + 1000, 1000)
             plt.hist(plot_data[y_column], bins=r, align='left')
             plt.xlabel(y_column)
             plt.ylabel("Frequency")
@@ -161,9 +175,12 @@ def index(request):
             buffer = BytesIO()
             plt.savefig(buffer, format='png')
             plt.close()
+            print("running")
             histogramChart2 = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
+
             return render(request, 'plot.html', {'title': title,'lineChart': lineChart, 'barChart': barChart, 'scatterChart': scatterChart, 'histogramChart1': histogramChart1,'x_column': x_column, 'histogramChart2': histogramChart2, 'y_column': y_column})
+
     else:
         form = CSVUploadForm()
     return render(request, 'upload.html', {'form': form, 'error_message' : error_message})
