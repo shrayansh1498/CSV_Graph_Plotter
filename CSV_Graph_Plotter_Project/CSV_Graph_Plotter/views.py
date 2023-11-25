@@ -1,12 +1,3 @@
-# from django.shortcuts import render, HttpResponse
-
-# # Create your views here.
-# def index(request):
-#     context={
-#         'variable1' : 'I am Shrayansh',
-#     }
-#     return render(request, 'index.html', context)
-#     # return HttpResponse("This is Home page")
 
 from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.forms import UserCreationForm
@@ -51,6 +42,7 @@ def index(request):
             y1_column = uploaded_csv.y1_column
             y2_column = uploaded_csv.y2_column
             y3_column = uploaded_csv.y3_column
+            y_label = uploaded_csv.y_label
 
             # Check if x and y columns exist in the data
             if x_column not in data.columns:
@@ -90,7 +82,7 @@ def index(request):
             plt.plot(plot_data[x_column], plot_data[y_column], label=y_column, marker='o', linestyle='-', markersize=3)
             plt.legend()
             plt.xlabel(x_column)
-            plt.ylabel(y_column)
+            plt.ylabel(y_label)
             if y1_column:
                 plot_data1 = data.dropna(subset=[x_column, y1_column])
                 plt.plot(plot_data1[x_column], plot_data1[y1_column], label=y1_column, marker='o', linestyle='-', markersize=3)
@@ -117,14 +109,8 @@ def index(request):
             plt.bar(plot_data[x_column], plot_data[y_column], width=bar_width, label=y_column)
             plt.legend()
             plt.xlabel(x_column)
-            plt.ylabel(y_column)
+            plt.ylabel(y_label)
 
-            # if y1_column:
-            #     plt.bar(plot_data[x_column], plot_data[y1_column])
-            # if y2_column:
-            #     plt.bar(plot_data[x_column], plot_data[y2_column])
-            # if y3_column:
-            #     plt.bar(plot_data[x_column], plot_data[y3_column])
             n=1
 
             if y1_column:
@@ -153,7 +139,7 @@ def index(request):
             plt.scatter(plot_data[x_column], plot_data[y_column], label=y_column)
             plt.legend()
             plt.xlabel(x_column)
-            plt.ylabel(y_column)
+            plt.ylabel(y_label)
             
 
             if y1_column:
@@ -171,7 +157,7 @@ def index(request):
             plt.close()
             scatterChart = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-            # Histogram Graph for X axis
+            # Histogram Graph for X column
             x_column_name = uploaded_csv.x_column
             x_values = plot_data[x_column_name].dropna()    
             plt.figure(figsize=(15, 10))
@@ -185,7 +171,7 @@ def index(request):
             plt.close()
             histogramChart1 = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-            # Histogram Graph for Y axis
+            # Histogram Graph for Y column
 
             y_column_name = uploaded_csv.y_column
             y_values = plot_data[y_column_name].dropna()    
@@ -261,16 +247,6 @@ def index(request):
         form = CSVUploadForm()
     return render(request, 'index.html', {'form': form, 'error_message' : error_message})
 
-
-# def about(request):
-#     return HttpResponse("This is about page")
-
-# def services(request):
-#     return HttpResponse("This is services page")
-
-# def contact(request):
-#     return HttpResponse("This is contact page")
-
 def signup(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
@@ -303,9 +279,6 @@ def user_login(request):
 def logout_user(request):
     logout(request)
     return redirect('/login')
-
-
-
 
 def home(request):
     error_message = None  # Initialize error_message as None

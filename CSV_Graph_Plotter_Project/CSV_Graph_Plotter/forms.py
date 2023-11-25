@@ -10,7 +10,7 @@ def validate_csv_extension(value):
 class CSVUploadForm(forms.ModelForm):
     class Meta:
         model = UploadedCSV
-        fields = ['title', 'csv_file', 'x_column', 'y_column', 'y1_column', 'y2_column', 'y3_column']
+        fields = ['title', 'csv_file', 'x_column', 'y_column', 'y1_column', 'y2_column', 'y3_column', 'y_label']
         
     csv_file = forms.FileField(validators=[validate_csv_extension])
 
